@@ -1,0 +1,9 @@
+{
+	"name": "node.js-Chat",
+	"description": "Ein einfacher Chat mit Node.js",
+	"author": "Tim Dellmann",
+	"dependencies": {
+		"express": "3.x",
+		"socket.io": "*"
+	}
+}
