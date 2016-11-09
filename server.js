@@ -3,6 +3,8 @@ var express = require('express')
 ,   server = require('http').createServer(app)
 ,   io = require('socket.io').listen(server)
 ,   conf = require('./config.json');
+const chatList = [];
+var count = 0;
 
 // Webserver
 // auf den Port x schalten
@@ -23,12 +25,17 @@ app.get('/', function (req, res) {
 io.sockets.on('connection', function (socket) {
 	// der Client ist verbunden
 	socket.emit('chat', { zeit: new Date(), text: 'Du bist nun mit dem Server verbunden!' });
+	chatList.forEach(function(element) {
+		socket.emit('chat', { zeit: element.zeit, name: element.name || 'Anonym', text: element.text });
+	}, this);
 	// wenn ein Benutzer einen Text senden
 	socket.on('chat', function (data) {
 		// so wird dieser Text an alle anderen Benutzer gesendet
+		chatList[count] = {zeit: new Date(), name: data.name || 'Anonym', text: data.text}
+		count++;
 		io.sockets.emit('chat', { zeit: new Date(), name: data.name || 'Anonym', text: data.text });
 	});
 });
 
 // Portnummer in die Konsole schreiben
-console.log('Der Server läuft nun unter http://127.0.0.1:' + conf.port + '/');
+console.log('Der Server lï¿½uft nun unter http://127.0.0.1:' + conf.port + '/');
