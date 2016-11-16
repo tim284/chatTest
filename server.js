@@ -3,6 +3,7 @@ var express = require('express')
 ,   server = require('http').createServer(app)
 ,   io = require('socket.io').listen(server)
 ,   conf = require('./config.json');
+var	fileManager = require('./filemanager.js');
 const chatList = [];
 var count = 0;
 
@@ -20,22 +21,29 @@ app.get('/', function (req, res) {
 	// so wird die Datei index.html ausgegeben
 	res.sendfile(__dirname + '/public/index.html');
 });
+app.get('/senf', function(req,res){
+	res.sendfile(__dirname + "/public/senf.html");
+});
 
 // Websocket
 io.sockets.on('connection', function (socket) {
 	// der Client ist verbunden
-	socket.emit('chat', { zeit: new Date(), text: 'Du bist nun mit dem Server verbunden!' });
-	chatList.forEach(function(element) {
-		socket.emit('chat', { zeit: element.zeit, name: element.name || 'Anonym', text: element.text });
-	}, this);
+	socket.emit('chat', new Nachricht(new Date(), "", "Du bist verbunden, Dolan!"));
+	fileManager.ReadFile("./chatlog.txt", socket);
+	
 	// wenn ein Benutzer einen Text senden
 	socket.on('chat', function (data) {
 		// so wird dieser Text an alle anderen Benutzer gesendet
-		chatList[count] = {zeit: new Date(), name: data.name || 'Anonym', text: data.text}
+		if(data.text=="") return;
+		fileManager.AddLine("./chatlog.txt", (new Date()).toString() + "," + data.name + "," + data.text + "|");
 		count++;
-		io.sockets.emit('chat', { zeit: new Date(), name: data.name || 'Anonym', text: data.text });
+		io.sockets.emit('chat', new Nachricht(new Date(),data.name,data.text));
 	});
 });
-
+function Nachricht(zeit, name,text){
+	this.zeit = zeit;
+	this.name = name;
+	this.text = text;
+}
 // Portnummer in die Konsole schreiben
 console.log('Der Server l�uft nun unter http://127.0.0.1:' + conf.port + '/');
