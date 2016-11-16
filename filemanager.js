@@ -1,5 +1,11 @@
 var fs = require('fs');
 
+exports.Exists = function(filepath){
+    fs.exists(filepath, (exists) => {
+        if(!exists) fs.writeFile(filepath, "", function(){});
+    })
+}
+
 exports.AddLine = function(filepath,line){
     fs.appendFile(filepath, line, function (err) {
         console.log("Fak. Schreiben von Datei schlug fehl!");
@@ -16,6 +22,14 @@ exports.ReadFile = function(filepath, socket){
 		socket.emit('chat', new Nachricht(Date.parse(elem[0]), elem[1] || 'Anonym', elem[2]));
 	}
     });
+}
+exports.ClearFile = function(filepath){
+    fs.unlink(filepath, function(err){
+        fs.exists(filepath, (exists) => {
+        if(!exists) fs.writeFile(filepath, "", function(){});
+        })
+    })
+    
 }
 
 function Nachricht(zeit, name,text){

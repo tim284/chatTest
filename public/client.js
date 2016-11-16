@@ -21,6 +21,10 @@ $(document).ready(function(){
         // nach unten scrollen
         $('body').scrollTop($('body')[0].scrollHeight);
     });
+    socket.on('alert', function(data){
+        alert(data);
+        window.location.reload();
+    });
 
     // Nachricht senden
     function senden(){
