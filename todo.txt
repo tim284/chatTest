@@ -1,0 +1,2 @@
+- ausgewählten participant anzeigen/calender.
+- liste von participants über antidote regeln.
