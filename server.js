@@ -23,5 +23,5 @@ app.get('/favicon.ico', function(req,res){
 app.use('/api', require('./api'));
 
 //start server
-app.listen(3000);
-console.log("API is running on port 3000");
+app.listen(process.env.PORT||8081);
+console.log("API is running on port " + (process.env.PORT||8081));
