@@ -15,6 +15,10 @@ app.use(bodyParser.json());
 app.get('/', function (req, res) {
     res.sendfile('./public/index.html');
 })
+app.get('/favicon.ico', function(req,res){
+    console.log("favicon requested");
+    res.send();
+})
 //Routes
 app.use('/api', require('./api'));
 
