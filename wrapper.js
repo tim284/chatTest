@@ -26,6 +26,7 @@ exports.addComment = function(id,comment,res){
 exports.getUpdates = function(participant, calendar, res){
     var updateObject = {participants : [],apps:[]};
     var isGlobal = calendar=="Global"?true:false;
+    try{
     storage.readAllParticipants(function (resultPart) { // Array with all Participants
         updateObject.participants = resultPart;
         storage.readAllAppointments(function (resultAllApp) { // JSON with aID: app-structure
@@ -44,6 +45,10 @@ exports.getUpdates = function(participant, calendar, res){
         })
 
     });
+    }
+    catch(e){
+        res.send();
+    }
 
     /*
     if(isGlobal) {

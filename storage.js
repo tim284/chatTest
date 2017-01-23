@@ -60,7 +60,7 @@ exports.readAllAppointments = function(callback){ // all aId-Appointment tuples
             if (error) console.log(error);
             for(var i in results){
                 var key = results[i].aID;
-                (erg[key]).participants.push(results[i].Name);
+                if((erg[key]) != undefined) (erg[key]).participants.push(results[i].Name);
             }
             callback(erg);
         });
